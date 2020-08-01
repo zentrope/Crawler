@@ -6,7 +6,7 @@
   "crawler")
 
 (def libs
-  '("lib/driver" "lib/support"))
+  '("lib/driver" "lib/support" "lib/http"))
 
 (def static-libs
   (string-join '("/usr/local/lib/openssl@1.1/lib/libcrypto.a"
