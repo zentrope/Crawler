@@ -24,7 +24,12 @@
 (def (start system)
   (log:info "Starting system.")
   (let-hash system
-    (driver:start .driver)))
+    (driver:start .driver)
+    (try
+     (let (text (driver:download .driver "https://zentrope.com"))
+       (displayln text))
+     (catch (e)
+       (log:error "ERROR: ~a" e)))))
 
 (def (stop system)
   (log:info "Stopping system.")
