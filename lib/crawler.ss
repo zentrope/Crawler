@@ -5,6 +5,7 @@
 (import :crawler/lib/driver
         :crawler/lib/spider
         :crawler/lib/support
+        (only-in :gerbil/gambit display-exception)
         :std/sugar
         :std/format)
 
@@ -30,6 +31,7 @@
                    url: "https://zentrope.com"
                    handler: (lambda (text) (displayln text)))
      (catch (e)
+       (display-exception e)
        (log:error "ERROR: ~a" e)))))
 
 (def (stop system)

@@ -26,6 +26,19 @@
   (unique (find-hrefs dom)))
 
 (def (html:text dom)
+  (string-normalize (find-text dom)))
+
+;;-----------------------------------------------------------------------------
+;; Implementation details
+;;-----------------------------------------------------------------------------
+
+(def find-title
+  (sxpath '(// title *text*)))
+
+(def find-hrefs
+  (sxpath '(// a @ href *text*)))
+
+(def find-text
   (let* ((ignores '(style script iframe *COMMENT* svg))
          (spacers '(a span i b))
 
@@ -44,20 +57,11 @@
                       (cons #t (str (cdr seed) text))
                       seed)))
 
-         (parser (make-html-parser start-fn: on-start
-                                   end-fn: on-end
-                                   text-fn: on-text)))
-
-    (chain (parser dom '(#t . ""))
-      (cdr <>)
-      (string-normalize <>))))
-
-;;-----------------------------------------------------------------------------
-;; Implementation details
-;;-----------------------------------------------------------------------------
-
-(def find-title (sxpath '(// title *text*)))
-(def find-hrefs (sxpath '(// a @ href *text*)))
+         (parse (make-html-parser start-fn: on-start
+                                  end-fn: on-end
+                                  text-fn: on-text)))
+    (lambda (dom)
+      (cdr (parse dom '(#t . ""))))))
 
 (def (string-normalize s)
   (chain s
