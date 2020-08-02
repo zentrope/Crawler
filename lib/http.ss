@@ -29,15 +29,18 @@
                  chain))
 
 (def (http:html? url)
+  ;;
   ;; Return true if the given URL resolves to an HTML page.
-
-  (truthy (string-contains (mime-type url) "text/html")))
-
+  ;;
+  (chain (mime-type url)
+    (string-contains <> "text/html")
+    (truthy <>)))
 
 (def (http:resolve url)
+  ;;
   ;; Given a URL, return the URL that results after all redirects have
   ;; been followed.
-
+  ;;
   (let loop ((url url))
     (let ((result (http-get url headers: headers redirect: #f)))
       (if (not (redirect? result))
@@ -52,8 +55,7 @@
   (assget name (request-headers request)))
 
 (def (redirect? request)
-  (let ((status (request-status request)))
-    (<= 301 status 308)))
+  (<= 301 (request-status request) 308))
 
 (def (truthy value)
   (if (equal? value #f) #f #t))
@@ -69,4 +71,4 @@
 
 ;; (http:resolve "http://amazon.com")
 ;; (mime-type "https://amazon.com")
-;; (http:html? "https://amazon.com")
+;; (http:html? "https://www.amazon.com")
