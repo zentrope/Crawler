@@ -3,6 +3,7 @@
 ;;
 
 (import :crawler/lib/driver
+        :crawler/lib/spider
         :crawler/lib/support
         :std/sugar
         :std/format)
@@ -12,13 +13,12 @@
 (def chrome-driver-url
   "http://localhost:9515/session")
 
-(def driver-service
-  (lambda ()
-    (driver:make url: chrome-driver-url)))
-
 (def (make-system)
-  (let ((system (make-hash-table)))
-    (hash-put! system 'driver (driver-service))
+  (let* ((system (make-hash-table))
+         (driver (driver:make url: chrome-driver-url))
+         (spider (spider:make driver: driver)))
+    (hash-put! system 'driver driver)
+    (hash-put! system 'spider spider)
     system))
 
 (def (start system)
@@ -26,8 +26,9 @@
   (let-hash system
     (driver:start .driver)
     (try
-     (let (text (driver:download .driver "https://zentrope.com"))
-       (displayln text))
+     (spider:crawl .spider
+                   url: "https://zentrope.com"
+                   handler: (lambda (text) (displayln text)))
      (catch (e)
        (log:error "ERROR: ~a" e)))))
 
