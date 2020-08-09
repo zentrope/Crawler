@@ -2,3 +2,7 @@
 *~
 crawler
 build-deps
+/*.c
+/*.o
+/*.scmx
+/*.tmp
