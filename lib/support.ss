@@ -1,6 +1,5 @@
-;;
-;;
-;;
+;;; -*- mode: gerbil; -*-
+;;;
 
 (export lock:lock?
         lock:make

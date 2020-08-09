@@ -1,5 +1,5 @@
-;;
-;;
+;;; -*- mode: gerbil; -*-
+;;;
 
 (export html:parse
         html:title

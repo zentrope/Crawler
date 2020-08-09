@@ -1,21 +1,6 @@
 ;;; -*- mode: gerbil; -*-
 ;;;
-;;; Copyright (c) 2020-present Keith Irwin
-;;;
-;;; This program is free software: you can redistribute it and/or modify
-;;; it under the terms of the GNU General Public License as published
-;;; by the Free Software Foundation, either version 3 of the License,
-;;; or (at your option) any later version.
-;;;
-;;; This program is distributed in the hope that it will be useful,
-;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;;; GNU General Public License for more details.
-;;;
-;;; You should have received a copy of the GNU General Public License
-;;; along with this program.  If not, see
-;;; <http://www.gnu.org/licenses/>.
-;;;
+
 
 (export spider:make
         spider:crawl)
@@ -24,7 +9,7 @@
         :crawler/lib/parser
         :std/format
         :std/sugar
-        :std/xml)
+        :std/srfi/13)
 
 (def (spider:make driver: driver)
   (let ((state (make-hash-table)))
@@ -38,6 +23,26 @@
       ;;(handler text)
       ))
   state)
+
+
+
+;;-----------------------------------------------------------------------------
+;; Implementation details
+;;-----------------------------------------------------------------------------
+
+(def (normalize-urls base urls)
+  (let* ((remove-hashes (lambda (urls)
+                          (filter (lambda (c) (not (string-contains c "#"))) urls)))
+         (remove-remotes (lambda (urls)
+                           (filter (lambda (c) (string-prefix? c base)) urls))))
+    ;;
+    (chain urls
+      (remove-remotes <>)
+      (remove-hashes <>))
+    ;;
+    ;;
+    ))
+
 
 (def (try-stuff text)
   (let* ((dom (html:parse text))

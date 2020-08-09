@@ -1,6 +1,5 @@
-;;
-;;
-;;
+;;; -*- mode: gerbil; -*-
+;;;
 
 (import :crawler/lib/driver
         :crawler/lib/spider

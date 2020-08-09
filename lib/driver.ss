@@ -1,6 +1,5 @@
-;;
-;;
-;;
+;;; -*- mode: gerbil; -*-
+;;;
 
 (export driver:make
         driver:start
