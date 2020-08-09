@@ -6,31 +6,27 @@
   "crawler")
 
 (def libs
-  '("lib/driver"
-    "lib/http"
+  '("lib/support"
     "lib/parser"
-    "lib/spider"
-    "lib/support"))
-
-(def static-libs
-  (string-join '("/usr/local/lib/openssl@1.1/lib/libcrypto.a"
-                 "/usr/local/lib/openssl@1.1/lib/ssl.a"
-                 "/usr/local/lib/zlib/lib/libz.a") " "))
+    "lib/http"
+    "lib/driver"
+    "lib/spider"))
 
 (def build-deps
   (append libs '("lib/crawler")))
 
 (def build-exe
-  (append libs '((exe: "lib/crawler"))))
+  (append libs '((exe: "lib/crawler" ;; "-ld-options" "-lz -lxml2 /usr/local/opt/openssl@1.1/lib/libcrypto.a /usr/local/opt/openssl@1.1/lib/libssl.a"
+                       ))))
 
 (def (build-static)
-  (append libs `((static-exe: "lib/crawler" "-ld-options" ,static-libs))))
+  (append libs `((static-exe: "lib/crawler"
+                              "-ld-options"
+                              "-lz -lxml2 /usr/local/opt/openssl@1.1/lib/libcrypto.a /usr/local/opt/openssl@1.1/lib/libssl.a"))))
+
 
 (def srcdir
   (path-normalize (path-directory (this-source-file))))
-
-;; (def build-dir
-;;   (string-append srcdir "build/"))
 
 (def (usage)
   (displayln "./build.ss <options>
@@ -55,7 +51,6 @@ OPTIONS:
      (make srcdir: srcdir bindir: "." build-exe))
 
     (["static"]
-     (setenv "NOSSL" "yes")
      (make srcdir: srcdir bindir: "." (build-static)))
 
     (["deps"]
